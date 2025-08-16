@@ -19,7 +19,7 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
     const totalPPG = teamPlayers.reduce((sum, player) => sum + player.ppg, 0);
     const totalRPG = teamPlayers.reduce((sum, player) => sum + player.rpg, 0);
     const totalAPG = teamPlayers.reduce((sum, player) => sum + player.apg, 0);
-    const totalSalary = teamPlayers.reduce((sum, player) => sum + player.salary, 0);
+    const totalCapHit = teamPlayers.reduce((sum, player) => sum + player.capHit, 0);
     
     return {
       totalPPG: Math.round(totalPPG * 10) / 10,
@@ -28,8 +28,23 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
       avgPPG: Math.round((totalPPG / teamPlayers.length) * 10) / 10,
       avgRPG: Math.round((totalRPG / teamPlayers.length) * 10) / 10,
       avgAPG: Math.round((totalAPG / teamPlayers.length) * 10) / 10,
-      totalSalary
+      totalCapHit
     };
+  };
+
+  const getDraftRoundDisplay = (round: 1 | 2 | 3 | 'FA') => {
+    if (round === 'FA') return 'FA';
+    return `R${round}`;
+  };
+
+  const getDraftRoundColor = (round: 1 | 2 | 3 | 'FA') => {
+    switch (round) {
+      case 1: return 'bg-yellow-500';
+      case 2: return 'bg-gray-400';
+      case 3: return 'bg-orange-600';
+      case 'FA': return 'bg-green-600';
+      default: return 'bg-gray-400';
+    }
   };
 
   if (selectedTeam) {
@@ -116,18 +131,18 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
               </div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-lg font-semibold text-[#0A1D37] mb-4">Team Finances</h3>
+              <h3 className="text-lg font-semibold text-[#0A1D37] mb-4">Salary Cap</h3>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Total Salary:</span>
+                  <span className="text-gray-600">Cap Hit:</span>
                   <span className="font-bold text-[#FF8500]">
-                    ${(stats.totalSalary / 1000000).toFixed(1)}M
+                    {stats.totalCapHit}/39 pts
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Cap Space:</span>
                   <span className="font-bold text-[#FF8500]">
-                    ${((8000000 - stats.totalSalary) / 1000000).toFixed(1)}M
+                    {39 - stats.totalCapHit} pts
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -155,7 +170,8 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PPG</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">RPG</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">APG</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Salary</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Draft</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cap Hit</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -195,8 +211,13 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {player.apg}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        ${(player.salary / 1000000).toFixed(1)}M
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 py-1 text-xs font-semibold text-white rounded ${getDraftRoundColor(player.draftRound)}`}>
+                          {getDraftRoundDisplay(player.draftRound)}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-[#FF8500]">
+                        {player.capHit} pts
                       </td>
                     </tr>
                   ))}
@@ -266,9 +287,15 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
                         </div>
                         <div className="pt-4 border-t border-gray-200">
                           <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm text-gray-600">Salary:</span>
+                            <span className="text-sm text-gray-600">Cap Hit:</span>
                             <span className="font-semibold text-[#FF8500]">
-                              ${(stats.totalSalary / 1000000).toFixed(1)}M
+                              {stats.totalCapHit}/39 pts
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-sm text-gray-600">Cap Space:</span>
+                            <span className="font-semibold text-green-600">
+                              {39 - stats.totalCapHit} pts
                             </span>
                           </div>
                           <p className="text-sm text-gray-600 text-center">

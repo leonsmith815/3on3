@@ -21,7 +21,9 @@ export interface Player {
   rpg: number;
   apg: number;
   contractYears: number;
-  salary: number;
+  salary: number; // Keep for display purposes
+  capHit: number; // New points-based cap hit
+  draftRound: 1 | 2 | 3 | 'FA'; // Draft round or Free Agent
   value: number; // 1-10 rating
   age: number;
   height: string;
@@ -57,6 +59,8 @@ export interface Trade {
   toTeamId: string;
   playersOffered: string[];
   playersRequested: string[];
+  capSpaceOffered?: number;
+  capSpaceRequested?: number;
   status: 'pending' | 'accepted' | 'rejected';
   date: Date;
 }

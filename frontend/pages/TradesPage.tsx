@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRightLeft, DollarSign, Users, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowRightLeft, DollarSign, Users, CheckCircle, XCircle, Plus, Minus } from 'lucide-react';
 import { teams } from '../data/teams';
 import { players } from '../data/players';
 
@@ -8,14 +8,16 @@ export function TradesPage() {
   const [selectedTeam2, setSelectedTeam2] = useState<string>('');
   const [team1Players, setTeam1Players] = useState<string[]>([]);
   const [team2Players, setTeam2Players] = useState<string[]>([]);
+  const [team1CapSpace, setTeam1CapSpace] = useState<number>(0);
+  const [team2CapSpace, setTeam2CapSpace] = useState<number>(0);
   const [tradeResult, setTradeResult] = useState<{
     valid: boolean;
     message: string;
-    team1SalaryCap: number;
-    team2SalaryCap: number;
+    team1CapHit: number;
+    team2CapHit: number;
   } | null>(null);
 
-  const SALARY_CAP = 8000000; // $8M salary cap
+  const SALARY_CAP = 39; // 39 points salary cap
 
   const getTeamPlayers = (teamId: string) => {
     return players.filter(player => player.teamId === teamId);
@@ -25,41 +27,51 @@ export function TradesPage() {
     return players.filter(player => playerIds.includes(player.id));
   };
 
-  const calculateSalaryTotal = (playerIds: string[]) => {
-    return getPlayersByIds(playerIds).reduce((total, player) => total + player.salary, 0);
+  const calculateCapHitTotal = (playerIds: string[]) => {
+    return getPlayersByIds(playerIds).reduce((total, player) => total + player.capHit, 0);
   };
 
-  const getTeamSalaryCap = (teamId: string, removePlayers: string[] = [], addPlayers: string[] = []) => {
+  const getTeamCapHit = (teamId: string, removePlayers: string[] = [], addPlayers: string[] = []) => {
     const currentPlayers = getTeamPlayers(teamId);
     const remainingPlayers = currentPlayers.filter(p => !removePlayers.includes(p.id));
     const newPlayers = getPlayersByIds(addPlayers);
     
-    return [...remainingPlayers, ...newPlayers].reduce((total, player) => total + player.salary, 0);
+    return [...remainingPlayers, ...newPlayers].reduce((total, player) => total + player.capHit, 0);
   };
 
   const validateTrade = () => {
-    if (!selectedTeam1 || !selectedTeam2 || team1Players.length === 0 || team2Players.length === 0) {
+    if (!selectedTeam1 || !selectedTeam2) {
       setTradeResult({
         valid: false,
-        message: 'Please select teams and players for both sides of the trade.',
-        team1SalaryCap: 0,
-        team2SalaryCap: 0
+        message: 'Please select teams for both sides of the trade.',
+        team1CapHit: 0,
+        team2CapHit: 0
       });
       return;
     }
 
-    const team1NewSalary = getTeamSalaryCap(selectedTeam1, team1Players, team2Players);
-    const team2NewSalary = getTeamSalaryCap(selectedTeam2, team2Players, team1Players);
+    if (team1Players.length === 0 && team2Players.length === 0 && team1CapSpace === 0 && team2CapSpace === 0) {
+      setTradeResult({
+        valid: false,
+        message: 'Please select players or cap space to trade.',
+        team1CapHit: 0,
+        team2CapHit: 0
+      });
+      return;
+    }
 
-    const team1Valid = team1NewSalary <= SALARY_CAP;
-    const team2Valid = team2NewSalary <= SALARY_CAP;
+    const team1NewCapHit = getTeamCapHit(selectedTeam1, team1Players, team2Players) - team1CapSpace + team2CapSpace;
+    const team2NewCapHit = getTeamCapHit(selectedTeam2, team2Players, team1Players) - team2CapSpace + team1CapSpace;
+
+    const team1Valid = team1NewCapHit <= SALARY_CAP;
+    const team2Valid = team2NewCapHit <= SALARY_CAP;
 
     if (team1Valid && team2Valid) {
       setTradeResult({
         valid: true,
         message: 'Trade is valid! Both teams remain under the salary cap.',
-        team1SalaryCap: team1NewSalary,
-        team2SalaryCap: team2NewSalary
+        team1CapHit: team1NewCapHit,
+        team2CapHit: team2NewCapHit
       });
     } else {
       const violatingTeams = [];
@@ -69,8 +81,8 @@ export function TradesPage() {
       setTradeResult({
         valid: false,
         message: `Trade violates salary cap for: ${violatingTeams.join(', ')}`,
-        team1SalaryCap: team1NewSalary,
-        team2SalaryCap: team2NewSalary
+        team1CapHit: team1NewCapHit,
+        team2CapHit: team2NewCapHit
       });
     }
   };
@@ -83,6 +95,8 @@ export function TradesPage() {
       setSelectedTeam2('');
       setTeam1Players([]);
       setTeam2Players([]);
+      setTeam1CapSpace(0);
+      setTeam2CapSpace(0);
       setTradeResult(null);
     }
   };
@@ -104,15 +118,34 @@ export function TradesPage() {
     setTradeResult(null);
   };
 
+  const getDraftRoundDisplay = (round: 1 | 2 | 3 | 'FA') => {
+    if (round === 'FA') return 'FA';
+    return `R${round}`;
+  };
+
+  const getDraftRoundColor = (round: 1 | 2 | 3 | 'FA') => {
+    switch (round) {
+      case 1: return 'bg-yellow-500';
+      case 2: return 'bg-gray-400';
+      case 3: return 'bg-orange-600';
+      case 'FA': return 'bg-green-600';
+      default: return 'bg-gray-400';
+    }
+  };
+
   const renderTeamSection = (teamNumber: 1 | 2) => {
     const selectedTeam = teamNumber === 1 ? selectedTeam1 : selectedTeam2;
     const selectedPlayers = teamNumber === 1 ? team1Players : team2Players;
+    const capSpaceOffered = teamNumber === 1 ? team1CapSpace : team2CapSpace;
     const setSelectedTeam = teamNumber === 1 ? setSelectedTeam1 : setSelectedTeam2;
+    const setCapSpace = teamNumber === 1 ? setTeam1CapSpace : setTeam2CapSpace;
     
     const team = teams.find(t => t.id === selectedTeam);
     const teamPlayers = selectedTeam ? getTeamPlayers(selectedTeam) : [];
     const selectedPlayerObjects = getPlayersByIds(selectedPlayers);
-    const totalSalary = calculateSalaryTotal(selectedPlayers);
+    const totalCapHit = calculateCapHitTotal(selectedPlayers);
+    const currentTeamCapHit = selectedTeam ? getTeamCapHit(selectedTeam) : 0;
+    const availableCapSpace = SALARY_CAP - currentTeamCapHit;
 
     return (
       <div className="bg-white rounded-lg shadow-lg p-6">
@@ -125,8 +158,13 @@ export function TradesPage() {
           value={selectedTeam}
           onChange={(e) => {
             setSelectedTeam(e.target.value);
-            if (teamNumber === 1) setTeam1Players([]);
-            else setTeam2Players([]);
+            if (teamNumber === 1) {
+              setTeam1Players([]);
+              setTeam1CapSpace(0);
+            } else {
+              setTeam2Players([]);
+              setTeam2CapSpace(0);
+            }
             setTradeResult(null);
           }}
           className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF8500] focus:border-transparent"
@@ -146,9 +184,41 @@ export function TradesPage() {
               <div>
                 <div className="font-bold text-[#0A1D37]">{team.city} {team.name}</div>
                 <div className="text-sm text-gray-600">
-                  Current Salary: ${(getTeamSalaryCap(team.id) / 1000000).toFixed(1)}M
+                  Current Cap Hit: {currentTeamCapHit}/{SALARY_CAP} points
+                </div>
+                <div className="text-sm text-gray-600">
+                  Available Cap Space: {availableCapSpace} points
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Cap Space Trading */}
+        {team && (
+          <div className="mb-4 p-3 border rounded-lg">
+            <h4 className="font-semibold text-[#0A1D37] mb-2">Trade Cap Space:</h4>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setCapSpace(Math.max(0, capSpaceOffered - 1))}
+                className="bg-red-500 text-white p-1 rounded"
+                disabled={capSpaceOffered <= 0}
+              >
+                <Minus size={16} />
+              </button>
+              <span className="px-3 py-1 bg-gray-100 rounded min-w-[60px] text-center">
+                {capSpaceOffered} pts
+              </span>
+              <button
+                onClick={() => setCapSpace(Math.min(availableCapSpace, capSpaceOffered + 1))}
+                className="bg-green-500 text-white p-1 rounded"
+                disabled={capSpaceOffered >= availableCapSpace}
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Max available: {availableCapSpace} points
             </div>
           </div>
         )}
@@ -176,8 +246,13 @@ export function TradesPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-bold text-[#FF8500]">
-                        ${(player.salary / 1000000).toFixed(1)}M
+                      <div className="flex items-center space-x-2">
+                        <span className={`px-2 py-1 text-xs font-semibold text-white rounded ${getDraftRoundColor(player.draftRound)}`}>
+                          {getDraftRoundDisplay(player.draftRound)}
+                        </span>
+                        <span className="text-sm font-bold text-[#FF8500]">
+                          {player.capHit} pts
+                        </span>
                       </div>
                       <div className="text-xs text-gray-600">
                         {player.contractYears}yr contract
@@ -191,20 +266,31 @@ export function TradesPage() {
         )}
 
         {/* Selected Players Summary */}
-        {selectedPlayerObjects.length > 0 && (
+        {(selectedPlayerObjects.length > 0 || capSpaceOffered > 0) && (
           <div className="border-t pt-4">
             <h4 className="font-semibold text-[#0A1D37] mb-2">Trading Away:</h4>
             <div className="space-y-2">
               {selectedPlayerObjects.map(player => (
                 <div key={player.id} className="flex justify-between items-center text-sm">
                   <span>{player.name} ({player.position})</span>
-                  <span className="font-medium">${(player.salary / 1000000).toFixed(1)}M</span>
+                  <div className="flex items-center space-x-2">
+                    <span className={`px-2 py-1 text-xs font-semibold text-white rounded ${getDraftRoundColor(player.draftRound)}`}>
+                      {getDraftRoundDisplay(player.draftRound)}
+                    </span>
+                    <span className="font-medium">{player.capHit} pts</span>
+                  </div>
                 </div>
               ))}
+              {capSpaceOffered > 0 && (
+                <div className="flex justify-between items-center text-sm">
+                  <span>Cap Space</span>
+                  <span className="font-medium">{capSpaceOffered} pts</span>
+                </div>
+              )}
             </div>
             <div className="border-t mt-2 pt-2 flex justify-between font-bold">
-              <span>Total Salary:</span>
-              <span className="text-[#FF8500]">${(totalSalary / 1000000).toFixed(1)}M</span>
+              <span>Total Value:</span>
+              <span className="text-[#FF8500]">{totalCapHit + capSpaceOffered} pts</span>
             </div>
           </div>
         )}
@@ -225,13 +311,44 @@ export function TradesPage() {
           <div className="flex items-center justify-center space-x-8">
             <div className="text-center">
               <DollarSign className="text-[#FF8500] mx-auto mb-2" size={32} />
-              <div className="text-2xl font-bold text-[#0A1D37]">${(SALARY_CAP / 1000000).toFixed(0)}M</div>
-              <div className="text-sm text-gray-600">Salary Cap</div>
+              <div className="text-2xl font-bold text-[#0A1D37]">{SALARY_CAP}</div>
+              <div className="text-sm text-gray-600">Salary Cap (Points)</div>
             </div>
             <div className="text-center">
               <Users className="text-[#FF8500] mx-auto mb-2" size={32} />
               <div className="text-2xl font-bold text-[#0A1D37]">6</div>
               <div className="text-sm text-gray-600">Players per Team</div>
+            </div>
+          </div>
+          
+          {/* Draft Round Legend */}
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <h3 className="text-lg font-semibold text-[#0A1D37] mb-3 text-center">Player Values by Draft Round</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className={`inline-block px-3 py-1 text-sm font-semibold text-white rounded ${getDraftRoundColor(1)} mb-2`}>
+                  Round 1
+                </div>
+                <div className="text-lg font-bold text-[#FF8500]">20 pts</div>
+              </div>
+              <div className="text-center">
+                <div className={`inline-block px-3 py-1 text-sm font-semibold text-white rounded ${getDraftRoundColor(2)} mb-2`}>
+                  Round 2
+                </div>
+                <div className="text-lg font-bold text-[#FF8500]">8 pts</div>
+              </div>
+              <div className="text-center">
+                <div className={`inline-block px-3 py-1 text-sm font-semibold text-white rounded ${getDraftRoundColor(3)} mb-2`}>
+                  Round 3
+                </div>
+                <div className="text-lg font-bold text-[#FF8500]">5 pts</div>
+              </div>
+              <div className="text-center">
+                <div className={`inline-block px-3 py-1 text-sm font-semibold text-white rounded ${getDraftRoundColor('FA')} mb-2`}>
+                  Free Agent
+                </div>
+                <div className="text-lg font-bold text-[#FF8500]">3 pts</div>
+              </div>
             </div>
           </div>
         </div>
@@ -295,34 +412,34 @@ export function TradesPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white p-4 rounded-lg">
                   <h4 className="font-semibold text-[#0A1D37] mb-2">
-                    {teams.find(t => t.id === selectedTeam1)?.name} New Salary
+                    {teams.find(t => t.id === selectedTeam1)?.name} New Cap Hit
                   </h4>
                   <div className="flex justify-between">
                     <span>Total:</span>
                     <span className={`font-bold ${
-                      tradeResult.team1SalaryCap <= SALARY_CAP ? 'text-green-600' : 'text-red-600'
+                      tradeResult.team1CapHit <= SALARY_CAP ? 'text-green-600' : 'text-red-600'
                     }`}>
-                      ${(tradeResult.team1SalaryCap / 1000000).toFixed(1)}M
+                      {tradeResult.team1CapHit}/{SALARY_CAP} pts
                     </span>
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
-                    Cap Space: ${((SALARY_CAP - tradeResult.team1SalaryCap) / 1000000).toFixed(1)}M
+                    Cap Space: {SALARY_CAP - tradeResult.team1CapHit} pts
                   </div>
                 </div>
                 <div className="bg-white p-4 rounded-lg">
                   <h4 className="font-semibold text-[#0A1D37] mb-2">
-                    {teams.find(t => t.id === selectedTeam2)?.name} New Salary
+                    {teams.find(t => t.id === selectedTeam2)?.name} New Cap Hit
                   </h4>
                   <div className="flex justify-between">
                     <span>Total:</span>
                     <span className={`font-bold ${
-                      tradeResult.team2SalaryCap <= SALARY_CAP ? 'text-green-600' : 'text-red-600'
+                      tradeResult.team2CapHit <= SALARY_CAP ? 'text-green-600' : 'text-red-600'
                     }`}>
-                      ${(tradeResult.team2SalaryCap / 1000000).toFixed(1)}M
+                      {tradeResult.team2CapHit}/{SALARY_CAP} pts
                     </span>
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
-                    Cap Space: ${((SALARY_CAP - tradeResult.team2SalaryCap) / 1000000).toFixed(1)}M
+                    Cap Space: {SALARY_CAP - tradeResult.team2CapHit} pts
                   </div>
                 </div>
               </div>
@@ -335,19 +452,21 @@ export function TradesPage() {
           <h2 className="text-2xl font-bold text-[#0A1D37] mb-4">Trade Rules</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 className="font-semibold text-[#FF8500] mb-2">Salary Cap</h3>
+              <h3 className="font-semibold text-[#FF8500] mb-2">Salary Cap System</h3>
               <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Teams must stay under ${(SALARY_CAP / 1000000).toFixed(0)}M salary cap</li>
-                <li>• All player salaries count toward the cap</li>
-                <li>• Trades cannot put teams over the cap</li>
+                <li>• Teams must stay under {SALARY_CAP} points</li>
+                <li>• Player values based on draft round</li>
+                <li>• Cap space can be traded between teams</li>
+                <li>• All trades must maintain cap compliance</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-[#FF8500] mb-2">Trade Requirements</h3>
+              <h3 className="font-semibold text-[#FF8500] mb-2">Player Values</h3>
               <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Both teams must trade at least one player</li>
-                <li>• Players can have multi-year contracts</li>
-                <li>• Salary matching is required for cap compliance</li>
+                <li>• 1st Round picks: 20 points</li>
+                <li>• 2nd Round picks: 8 points</li>
+                <li>• 3rd Round picks: 5 points</li>
+                <li>• Free Agents: 3 points</li>
               </ul>
             </div>
           </div>

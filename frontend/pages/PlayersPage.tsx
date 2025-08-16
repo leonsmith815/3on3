@@ -12,21 +12,39 @@ export function PlayersPage({ onPlayerClick }: PlayersPageProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPosition, setSelectedPosition] = useState<string>('all');
   const [selectedTeam, setSelectedTeam] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'name' | 'ppg' | 'rpg' | 'apg' | 'value'>('ppg');
+  const [selectedDraftRound, setSelectedDraftRound] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'name' | 'ppg' | 'rpg' | 'apg' | 'value' | 'capHit'>('ppg');
 
   const positions = ['all', 'PG', 'SG', 'SF', 'PF', 'C', 'Utility'];
+  const draftRounds = ['all', '1', '2', '3', 'FA'];
 
   const filteredPlayers = players
     .filter(player => {
       const matchesSearch = player.name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesPosition = selectedPosition === 'all' || player.position === selectedPosition;
       const matchesTeam = selectedTeam === 'all' || player.teamId === selectedTeam;
-      return matchesSearch && matchesPosition && matchesTeam;
+      const matchesDraftRound = selectedDraftRound === 'all' || player.draftRound.toString() === selectedDraftRound;
+      return matchesSearch && matchesPosition && matchesTeam && matchesDraftRound;
     })
     .sort((a, b) => {
       if (sortBy === 'name') return a.name.localeCompare(b.name);
       return b[sortBy] - a[sortBy];
     });
+
+  const getDraftRoundDisplay = (round: 1 | 2 | 3 | 'FA') => {
+    if (round === 'FA') return 'FA';
+    return `R${round}`;
+  };
+
+  const getDraftRoundColor = (round: 1 | 2 | 3 | 'FA') => {
+    switch (round) {
+      case 1: return 'bg-yellow-500';
+      case 2: return 'bg-gray-400';
+      case 3: return 'bg-orange-600';
+      case 'FA': return 'bg-green-600';
+      default: return 'bg-gray-400';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F7F5F3] py-8">
@@ -38,7 +56,7 @@ export function PlayersPage({ onPlayerClick }: PlayersPageProps) {
 
         {/* Filters */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
             {/* Search */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -78,6 +96,19 @@ export function PlayersPage({ onPlayerClick }: PlayersPageProps) {
               ))}
             </select>
 
+            {/* Draft Round Filter */}
+            <select
+              value={selectedDraftRound}
+              onChange={(e) => setSelectedDraftRound(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF8500] focus:border-transparent"
+            >
+              <option value="all">All Draft Rounds</option>
+              <option value="1">Round 1 (20 pts)</option>
+              <option value="2">Round 2 (8 pts)</option>
+              <option value="3">Round 3 (5 pts)</option>
+              <option value="FA">Free Agent (3 pts)</option>
+            </select>
+
             {/* Sort By */}
             <select
               value={sortBy}
@@ -87,6 +118,7 @@ export function PlayersPage({ onPlayerClick }: PlayersPageProps) {
               <option value="ppg">Points Per Game</option>
               <option value="rpg">Rebounds Per Game</option>
               <option value="apg">Assists Per Game</option>
+              <option value="capHit">Cap Hit</option>
               <option value="value">Player Value</option>
               <option value="name">Name (A-Z)</option>
             </select>
@@ -152,12 +184,21 @@ export function PlayersPage({ onPlayerClick }: PlayersPageProps) {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center mb-3">
                     <div className="text-sm text-gray-600">
                       Value: {player.value}/10
                     </div>
                     <div className="text-sm font-semibold text-[#FF8500]">
                       ${(player.salary / 1000000).toFixed(1)}M
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <span className={`px-2 py-1 text-xs font-semibold text-white rounded ${getDraftRoundColor(player.draftRound)}`}>
+                      {getDraftRoundDisplay(player.draftRound)}
+                    </span>
+                    <div className="text-lg font-bold text-[#FF8500]">
+                      {player.capHit} pts
                     </div>
                   </div>
 

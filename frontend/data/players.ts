@@ -12,6 +12,8 @@ export const players: Player[] = [
     apg: 8.7,
     contractYears: 3,
     salary: 1700000,
+    capHit: 20,
+    draftRound: 1,
     value: 9,
     age: 26,
     height: '6\'2"',
@@ -30,6 +32,8 @@ export const players: Player[] = [
     apg: 3.5,
     contractYears: 2,
     salary: 1300000,
+    capHit: 8,
+    draftRound: 2,
     value: 8,
     age: 24,
     height: '6\'4"',
@@ -48,6 +52,8 @@ export const players: Player[] = [
     apg: 4.2,
     contractYears: 4,
     salary: 1440000,
+    capHit: 5,
+    draftRound: 3,
     value: 8,
     age: 28,
     height: '6\'7"',
@@ -66,6 +72,8 @@ export const players: Player[] = [
     apg: 2.1,
     contractYears: 1,
     salary: 1160000,
+    capHit: 3,
+    draftRound: 'FA',
     value: 7,
     age: 30,
     height: '6\'9"',
@@ -84,6 +92,8 @@ export const players: Player[] = [
     apg: 1.8,
     contractYears: 2,
     salary: 1040000,
+    capHit: 3,
+    draftRound: 'FA',
     value: 7,
     age: 27,
     height: '6\'11"',
@@ -102,6 +112,8 @@ export const players: Player[] = [
     apg: 5.1,
     contractYears: 1,
     salary: 760000,
+    capHit: 3,
+    draftRound: 'FA',
     value: 6,
     age: 23,
     height: '6\'3"',
@@ -121,6 +133,8 @@ export const players: Player[] = [
     apg: 9.2,
     contractYears: 4,
     salary: 1900000,
+    capHit: 20,
+    draftRound: 1,
     value: 10,
     age: 25,
     height: '6\'1"',
@@ -139,6 +153,8 @@ export const players: Player[] = [
     apg: 4.1,
     contractYears: 3,
     salary: 1560000,
+    capHit: 8,
+    draftRound: 2,
     value: 9,
     age: 27,
     height: '6\'5"',
@@ -157,6 +173,8 @@ export const players: Player[] = [
     apg: 3.8,
     contractYears: 2,
     salary: 1360000,
+    capHit: 5,
+    draftRound: 3,
     value: 8,
     age: 26,
     height: '6\'8"',
@@ -175,6 +193,8 @@ export const players: Player[] = [
     apg: 2.5,
     contractYears: 3,
     salary: 1240000,
+    capHit: 3,
+    draftRound: 'FA',
     value: 8,
     age: 29,
     height: '6\'10"',
@@ -193,6 +213,8 @@ export const players: Player[] = [
     apg: 1.9,
     contractYears: 2,
     salary: 1120000,
+    capHit: 3,
+    draftRound: 'FA',
     value: 7,
     age: 28,
     height: '7\'0"',
@@ -211,6 +233,8 @@ export const players: Player[] = [
     apg: 6.3,
     contractYears: 1,
     salary: 840000,
+    capHit: 3,
+    draftRound: 'FA',
     value: 6,
     age: 24,
     height: '6\'4"',
@@ -230,6 +254,8 @@ export const players: Player[] = [
     apg: 8.9,
     contractYears: 3,
     salary: 1640000,
+    capHit: 20,
+    draftRound: 1,
     value: 9,
     age: 27,
     height: '6\'3"',
@@ -248,6 +274,8 @@ export const players: Player[] = [
     apg: 3.7,
     contractYears: 2,
     salary: 1400000,
+    capHit: 8,
+    draftRound: 2,
     value: 8,
     age: 25,
     height: '6\'6"',
@@ -266,6 +294,8 @@ export const players: Player[] = [
     apg: 4.5,
     contractYears: 4,
     salary: 1500000,
+    capHit: 5,
+    draftRound: 3,
     value: 8,
     age: 26,
     height: '6\'7"',
@@ -284,6 +314,8 @@ export const players: Player[] = [
     apg: 2.8,
     contractYears: 2,
     salary: 1280000,
+    capHit: 3,
+    draftRound: 'FA',
     value: 7,
     age: 28,
     height: '6\'9"',
@@ -302,6 +334,8 @@ export const players: Player[] = [
     apg: 2.1,
     contractYears: 3,
     salary: 1180000,
+    capHit: 3,
+    draftRound: 'FA',
     value: 7,
     age: 29,
     height: '6\'11"',
@@ -320,6 +354,8 @@ export const players: Player[] = [
     apg: 5.7,
     contractYears: 1,
     salary: 800000,
+    capHit: 3,
+    draftRound: 'FA',
     value: 6,
     age: 22,
     height: '6\'2"',
@@ -330,30 +366,31 @@ export const players: Player[] = [
   }
 ];
 
-// Generate remaining players for other teams with updated salary structure
+// Generate remaining players for other teams with updated cap hit structure
 const generatePlayersForTeam = (teamId: string, startId: number): Player[] => {
   const positions: Player['position'][] = ['PG', 'SG', 'SF', 'PF', 'C', 'Utility'];
   const firstNames = ['James', 'Michael', 'Robert', 'John', 'David', 'William', 'Richard', 'Joseph', 'Thomas', 'Christopher'];
   const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
   
-  // Salary ranges based on position and value
-  const getSalaryForPosition = (position: Player['position'], value: number) => {
-    const baseSalaries = {
-      'PG': 1600000,
-      'SG': 1400000,
-      'SF': 1350000,
-      'PF': 1250000,
-      'C': 1150000,
-      'Utility': 800000
-    };
-    
-    const base = baseSalaries[position];
-    const multiplier = 0.7 + (value / 10) * 0.6; // Range from 0.7 to 1.3
-    return Math.round(base * multiplier);
+  // Cap hit based on draft round
+  const getCapHitForRound = (round: Player['draftRound']) => {
+    switch (round) {
+      case 1: return 20;
+      case 2: return 8;
+      case 3: return 5;
+      case 'FA': return 3;
+      default: return 3;
+    }
   };
+
+  // Distribute draft rounds across positions
+  const draftRounds: Player['draftRound'][] = [1, 2, 3, 'FA', 'FA', 'FA'];
   
   return positions.map((position, index) => {
     const value = Math.floor(Math.random() * 4) + 6; // 6-9 value range
+    const draftRound = draftRounds[index];
+    const capHit = getCapHitForRound(draftRound);
+    
     return {
       id: `p${startId + index}`,
       name: `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`,
@@ -363,7 +400,9 @@ const generatePlayersForTeam = (teamId: string, startId: number): Player[] => {
       rpg: Math.round((Math.random() * 8 + 2) * 10) / 10,
       apg: Math.round((Math.random() * 6 + 1) * 10) / 10,
       contractYears: Math.floor(Math.random() * 4) + 1,
-      salary: getSalaryForPosition(position, value),
+      salary: Math.floor(Math.random() * 500000) + 300000,
+      capHit,
+      draftRound,
       value,
       age: Math.floor(Math.random() * 10) + 22,
       height: `6'${Math.floor(Math.random() * 12)}"`,

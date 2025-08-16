@@ -11,6 +11,21 @@ interface PlayerModalProps {
 export function PlayerModal({ player, onClose }: PlayerModalProps) {
   const team = teams.find(t => t.id === player.teamId);
 
+  const getDraftRoundDisplay = (round: 1 | 2 | 3 | 'FA') => {
+    if (round === 'FA') return 'Free Agent';
+    return `Round ${round}`;
+  };
+
+  const getDraftRoundColor = (round: 1 | 2 | 3 | 'FA') => {
+    switch (round) {
+      case 1: return 'from-yellow-500 to-yellow-600';
+      case 2: return 'from-gray-400 to-gray-500';
+      case 3: return 'from-orange-600 to-orange-700';
+      case 'FA': return 'from-green-600 to-green-700';
+      default: return 'from-gray-400 to-gray-500';
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -96,6 +111,23 @@ export function PlayerModal({ player, onClose }: PlayerModalProps) {
                         }`}
                       />
                     ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Cap Hit and Draft Info */}
+            <div className="bg-gray-50 p-4 rounded-lg mb-6">
+              <h3 className="text-lg font-semibold text-[#0A1D37] mb-3">Contract Details</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Cap Hit:</span>
+                  <span className="text-2xl font-bold text-[#FF8500]">{player.capHit} pts</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Draft Status:</span>
+                  <div className={`px-3 py-1 text-sm font-semibold text-white rounded bg-gradient-to-r ${getDraftRoundColor(player.draftRound)}`}>
+                    {getDraftRoundDisplay(player.draftRound)}
                   </div>
                 </div>
               </div>
