@@ -11,7 +11,7 @@ export const players: Player[] = [
     rpg: 5.2,
     apg: 8.7,
     contractYears: 3,
-    salary: 850000,
+    salary: 1700000,
     value: 9,
     age: 26,
     height: '6\'2"',
@@ -29,7 +29,7 @@ export const players: Player[] = [
     rpg: 4.1,
     apg: 3.5,
     contractYears: 2,
-    salary: 650000,
+    salary: 1300000,
     value: 8,
     age: 24,
     height: '6\'4"',
@@ -47,7 +47,7 @@ export const players: Player[] = [
     rpg: 7.8,
     apg: 4.2,
     contractYears: 4,
-    salary: 720000,
+    salary: 1440000,
     value: 8,
     age: 28,
     height: '6\'7"',
@@ -65,7 +65,7 @@ export const players: Player[] = [
     rpg: 9.5,
     apg: 2.1,
     contractYears: 1,
-    salary: 580000,
+    salary: 1160000,
     value: 7,
     age: 30,
     height: '6\'9"',
@@ -83,7 +83,7 @@ export const players: Player[] = [
     rpg: 8.9,
     apg: 1.8,
     contractYears: 2,
-    salary: 520000,
+    salary: 1040000,
     value: 7,
     age: 27,
     height: '6\'11"',
@@ -101,7 +101,7 @@ export const players: Player[] = [
     rpg: 3.4,
     apg: 5.1,
     contractYears: 1,
-    salary: 380000,
+    salary: 760000,
     value: 6,
     age: 23,
     height: '6\'3"',
@@ -120,7 +120,7 @@ export const players: Player[] = [
     rpg: 4.9,
     apg: 9.2,
     contractYears: 4,
-    salary: 950000,
+    salary: 1900000,
     value: 10,
     age: 25,
     height: '6\'1"',
@@ -138,7 +138,7 @@ export const players: Player[] = [
     rpg: 5.7,
     apg: 4.1,
     contractYears: 3,
-    salary: 780000,
+    salary: 1560000,
     value: 9,
     age: 27,
     height: '6\'5"',
@@ -156,7 +156,7 @@ export const players: Player[] = [
     rpg: 8.2,
     apg: 3.8,
     contractYears: 2,
-    salary: 680000,
+    salary: 1360000,
     value: 8,
     age: 26,
     height: '6\'8"',
@@ -174,7 +174,7 @@ export const players: Player[] = [
     rpg: 10.1,
     apg: 2.5,
     contractYears: 3,
-    salary: 620000,
+    salary: 1240000,
     value: 8,
     age: 29,
     height: '6\'10"',
@@ -192,7 +192,7 @@ export const players: Player[] = [
     rpg: 9.8,
     apg: 1.9,
     contractYears: 2,
-    salary: 560000,
+    salary: 1120000,
     value: 7,
     age: 28,
     height: '7\'0"',
@@ -210,7 +210,7 @@ export const players: Player[] = [
     rpg: 4.1,
     apg: 6.3,
     contractYears: 1,
-    salary: 420000,
+    salary: 840000,
     value: 6,
     age: 24,
     height: '6\'4"',
@@ -229,7 +229,7 @@ export const players: Player[] = [
     rpg: 5.4,
     apg: 8.9,
     contractYears: 3,
-    salary: 820000,
+    salary: 1640000,
     value: 9,
     age: 27,
     height: '6\'3"',
@@ -247,7 +247,7 @@ export const players: Player[] = [
     rpg: 4.8,
     apg: 3.7,
     contractYears: 2,
-    salary: 700000,
+    salary: 1400000,
     value: 8,
     age: 25,
     height: '6\'6"',
@@ -265,7 +265,7 @@ export const players: Player[] = [
     rpg: 7.1,
     apg: 4.5,
     contractYears: 4,
-    salary: 750000,
+    salary: 1500000,
     value: 8,
     age: 26,
     height: '6\'7"',
@@ -283,7 +283,7 @@ export const players: Player[] = [
     rpg: 9.7,
     apg: 2.8,
     contractYears: 2,
-    salary: 640000,
+    salary: 1280000,
     value: 7,
     age: 28,
     height: '6\'9"',
@@ -301,7 +301,7 @@ export const players: Player[] = [
     rpg: 10.3,
     apg: 2.1,
     contractYears: 3,
-    salary: 590000,
+    salary: 1180000,
     value: 7,
     age: 29,
     height: '6\'11"',
@@ -319,7 +319,7 @@ export const players: Player[] = [
     rpg: 3.9,
     apg: 5.7,
     contractYears: 1,
-    salary: 400000,
+    salary: 800000,
     value: 6,
     age: 22,
     height: '6\'2"',
@@ -330,30 +330,49 @@ export const players: Player[] = [
   }
 ];
 
-// Generate remaining players for other teams
+// Generate remaining players for other teams with updated salary structure
 const generatePlayersForTeam = (teamId: string, startId: number): Player[] => {
   const positions: Player['position'][] = ['PG', 'SG', 'SF', 'PF', 'C', 'Utility'];
   const firstNames = ['James', 'Michael', 'Robert', 'John', 'David', 'William', 'Richard', 'Joseph', 'Thomas', 'Christopher'];
   const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
   
-  return positions.map((position, index) => ({
-    id: `p${startId + index}`,
-    name: `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`,
-    position,
-    teamId,
-    ppg: Math.round((Math.random() * 20 + 8) * 10) / 10,
-    rpg: Math.round((Math.random() * 8 + 2) * 10) / 10,
-    apg: Math.round((Math.random() * 6 + 1) * 10) / 10,
-    contractYears: Math.floor(Math.random() * 4) + 1,
-    salary: Math.floor(Math.random() * 500000) + 300000,
-    value: Math.floor(Math.random() * 4) + 6,
-    age: Math.floor(Math.random() * 10) + 22,
-    height: `6'${Math.floor(Math.random() * 12)}"`,
-    weight: Math.floor(Math.random() * 60) + 180,
-    college: 'State University',
-    awards: [],
-    image: '/api/placeholder/150/150'
-  }));
+  // Salary ranges based on position and value
+  const getSalaryForPosition = (position: Player['position'], value: number) => {
+    const baseSalaries = {
+      'PG': 1600000,
+      'SG': 1400000,
+      'SF': 1350000,
+      'PF': 1250000,
+      'C': 1150000,
+      'Utility': 800000
+    };
+    
+    const base = baseSalaries[position];
+    const multiplier = 0.7 + (value / 10) * 0.6; // Range from 0.7 to 1.3
+    return Math.round(base * multiplier);
+  };
+  
+  return positions.map((position, index) => {
+    const value = Math.floor(Math.random() * 4) + 6; // 6-9 value range
+    return {
+      id: `p${startId + index}`,
+      name: `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`,
+      position,
+      teamId,
+      ppg: Math.round((Math.random() * 20 + 8) * 10) / 10,
+      rpg: Math.round((Math.random() * 8 + 2) * 10) / 10,
+      apg: Math.round((Math.random() * 6 + 1) * 10) / 10,
+      contractYears: Math.floor(Math.random() * 4) + 1,
+      salary: getSalaryForPosition(position, value),
+      value,
+      age: Math.floor(Math.random() * 10) + 22,
+      height: `6'${Math.floor(Math.random() * 12)}"`,
+      weight: Math.floor(Math.random() * 60) + 180,
+      college: 'State University',
+      awards: [],
+      image: '/api/placeholder/150/150'
+    };
+  });
 };
 
 // Add players for remaining teams

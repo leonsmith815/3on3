@@ -78,7 +78,7 @@ export function PlayerModal({ player, onClose }: PlayerModalProps) {
                 <div className="flex items-center space-x-2">
                   <DollarSign className="text-[#FF8500]" size={16} />
                   <span className="text-sm text-gray-600">Salary:</span>
-                  <span className="font-medium">${player.salary.toLocaleString()}</span>
+                  <span className="font-medium">${(player.salary / 1000000).toFixed(1)}M</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Calendar className="text-[#FF8500]" size={16} />

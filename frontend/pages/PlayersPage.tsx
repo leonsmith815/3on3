@@ -157,7 +157,7 @@ export function PlayersPage({ onPlayerClick }: PlayersPageProps) {
                       Value: {player.value}/10
                     </div>
                     <div className="text-sm font-semibold text-[#FF8500]">
-                      ${(player.salary / 1000).toFixed(0)}K
+                      ${(player.salary / 1000000).toFixed(1)}M
                     </div>
                   </div>
 

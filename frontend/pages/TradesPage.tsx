@@ -15,7 +15,7 @@ export function TradesPage() {
     team2SalaryCap: number;
   } | null>(null);
 
-  const SALARY_CAP = 4000000; // $4M salary cap
+  const SALARY_CAP = 8000000; // $8M salary cap
 
   const getTeamPlayers = (teamId: string) => {
     return players.filter(player => player.teamId === teamId);
@@ -146,7 +146,7 @@ export function TradesPage() {
               <div>
                 <div className="font-bold text-[#0A1D37]">{team.city} {team.name}</div>
                 <div className="text-sm text-gray-600">
-                  Current Salary: ${getTeamSalaryCap(team.id).toLocaleString()}
+                  Current Salary: ${(getTeamSalaryCap(team.id) / 1000000).toFixed(1)}M
                 </div>
               </div>
             </div>
@@ -177,7 +177,7 @@ export function TradesPage() {
                     </div>
                     <div className="text-right">
                       <div className="text-sm font-bold text-[#FF8500]">
-                        ${player.salary.toLocaleString()}
+                        ${(player.salary / 1000000).toFixed(1)}M
                       </div>
                       <div className="text-xs text-gray-600">
                         {player.contractYears}yr contract
@@ -198,13 +198,13 @@ export function TradesPage() {
               {selectedPlayerObjects.map(player => (
                 <div key={player.id} className="flex justify-between items-center text-sm">
                   <span>{player.name} ({player.position})</span>
-                  <span className="font-medium">${player.salary.toLocaleString()}</span>
+                  <span className="font-medium">${(player.salary / 1000000).toFixed(1)}M</span>
                 </div>
               ))}
             </div>
             <div className="border-t mt-2 pt-2 flex justify-between font-bold">
               <span>Total Salary:</span>
-              <span className="text-[#FF8500]">${totalSalary.toLocaleString()}</span>
+              <span className="text-[#FF8500]">${(totalSalary / 1000000).toFixed(1)}M</span>
             </div>
           </div>
         )}
@@ -225,7 +225,7 @@ export function TradesPage() {
           <div className="flex items-center justify-center space-x-8">
             <div className="text-center">
               <DollarSign className="text-[#FF8500] mx-auto mb-2" size={32} />
-              <div className="text-2xl font-bold text-[#0A1D37]">${(SALARY_CAP / 1000000).toFixed(1)}M</div>
+              <div className="text-2xl font-bold text-[#0A1D37]">${(SALARY_CAP / 1000000).toFixed(0)}M</div>
               <div className="text-sm text-gray-600">Salary Cap</div>
             </div>
             <div className="text-center">
@@ -302,11 +302,11 @@ export function TradesPage() {
                     <span className={`font-bold ${
                       tradeResult.team1SalaryCap <= SALARY_CAP ? 'text-green-600' : 'text-red-600'
                     }`}>
-                      ${tradeResult.team1SalaryCap.toLocaleString()}
+                      ${(tradeResult.team1SalaryCap / 1000000).toFixed(1)}M
                     </span>
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
-                    Cap Space: ${(SALARY_CAP - tradeResult.team1SalaryCap).toLocaleString()}
+                    Cap Space: ${((SALARY_CAP - tradeResult.team1SalaryCap) / 1000000).toFixed(1)}M
                   </div>
                 </div>
                 <div className="bg-white p-4 rounded-lg">
@@ -318,11 +318,11 @@ export function TradesPage() {
                     <span className={`font-bold ${
                       tradeResult.team2SalaryCap <= SALARY_CAP ? 'text-green-600' : 'text-red-600'
                     }`}>
-                      ${tradeResult.team2SalaryCap.toLocaleString()}
+                      ${(tradeResult.team2SalaryCap / 1000000).toFixed(1)}M
                     </span>
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
-                    Cap Space: ${(SALARY_CAP - tradeResult.team2SalaryCap).toLocaleString()}
+                    Cap Space: ${((SALARY_CAP - tradeResult.team2SalaryCap) / 1000000).toFixed(1)}M
                   </div>
                 </div>
               </div>
@@ -337,7 +337,7 @@ export function TradesPage() {
             <div>
               <h3 className="font-semibold text-[#FF8500] mb-2">Salary Cap</h3>
               <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Teams must stay under ${(SALARY_CAP / 1000000).toFixed(1)}M salary cap</li>
+                <li>• Teams must stay under ${(SALARY_CAP / 1000000).toFixed(0)}M salary cap</li>
                 <li>• All player salaries count toward the cap</li>
                 <li>• Trades cannot put teams over the cap</li>
               </ul>

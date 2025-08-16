@@ -19,6 +19,7 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
     const totalPPG = teamPlayers.reduce((sum, player) => sum + player.ppg, 0);
     const totalRPG = teamPlayers.reduce((sum, player) => sum + player.rpg, 0);
     const totalAPG = teamPlayers.reduce((sum, player) => sum + player.apg, 0);
+    const totalSalary = teamPlayers.reduce((sum, player) => sum + player.salary, 0);
     
     return {
       totalPPG: Math.round(totalPPG * 10) / 10,
@@ -26,7 +27,8 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
       totalAPG: Math.round(totalAPG * 10) / 10,
       avgPPG: Math.round((totalPPG / teamPlayers.length) * 10) / 10,
       avgRPG: Math.round((totalRPG / teamPlayers.length) * 10) / 10,
-      avgAPG: Math.round((totalAPG / teamPlayers.length) * 10) / 10
+      avgAPG: Math.round((totalAPG / teamPlayers.length) * 10) / 10,
+      totalSalary
     };
   };
 
@@ -114,12 +116,18 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
               </div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-lg font-semibold text-[#0A1D37] mb-4">Season Record</h3>
+              <h3 className="text-lg font-semibold text-[#0A1D37] mb-4">Team Finances</h3>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Win %:</span>
+                  <span className="text-gray-600">Total Salary:</span>
                   <span className="font-bold text-[#FF8500]">
-                    {((team.wins / (team.wins + team.losses)) * 100).toFixed(1)}%
+                    ${(stats.totalSalary / 1000000).toFixed(1)}M
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Cap Space:</span>
+                  <span className="font-bold text-[#FF8500]">
+                    ${((8000000 - stats.totalSalary) / 1000000).toFixed(1)}M
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -188,7 +196,7 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
                         {player.apg}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        ${player.salary.toLocaleString()}
+                        ${(player.salary / 1000000).toFixed(1)}M
                       </td>
                     </tr>
                   ))}
@@ -242,7 +250,7 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
                         <p className="text-lg opacity-90">{team.name}</p>
                       </div>
                       <div className="p-6">
-                        <div className="grid grid-cols-3 gap-4 text-center">
+                        <div className="grid grid-cols-3 gap-4 text-center mb-4">
                           <div>
                             <div className="text-lg font-bold text-[#FF8500]">{stats.totalPPG}</div>
                             <div className="text-xs text-gray-600">Team PPG</div>
@@ -256,7 +264,13 @@ export function TeamsPage({ onPlayerClick }: TeamsPageProps) {
                             <div className="text-xs text-gray-600">Team APG</div>
                           </div>
                         </div>
-                        <div className="mt-4 pt-4 border-t border-gray-200">
+                        <div className="pt-4 border-t border-gray-200">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-sm text-gray-600">Salary:</span>
+                            <span className="font-semibold text-[#FF8500]">
+                              ${(stats.totalSalary / 1000000).toFixed(1)}M
+                            </span>
+                          </div>
                           <p className="text-sm text-gray-600 text-center">
                             {teamPlayers.length} Players • Click to view roster
                           </p>
