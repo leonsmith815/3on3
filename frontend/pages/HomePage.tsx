@@ -38,10 +38,18 @@ export function HomePage({ onPlayerClick }: HomePageProps) {
           {/* Logo */}
           <div className="mb-6">
             <img 
-              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDEyOCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGODUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRTYzOTQ2O3N0b3Atb3BhY2l0eToxIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjY0IiBjeT0iNjQiIHI9IjY0IiBmaWxsPSJ1cmwoI2dyYWRpZW50KSIvPgo8dGV4dCB4PSI2NCIgeT0iODAiIGZvbnQtZmFtaWx5PSJJbnRlciwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5VM0JMPC90ZXh0Pgo8L3N2Zz4K" 
+              src="https://i.imgur.com/YourActualLogoURL.png" 
               alt="U3BL Logo" 
               className="w-32 h-32 mx-auto object-contain mb-4 drop-shadow-2xl"
+              onError={(e) => {
+                // Fallback to gradient circle if image fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling.style.display = 'flex';
+              }}
             />
+            <div className="w-32 h-32 bg-gradient-to-br from-[#FF8500] to-[#E63946] rounded-full flex items-center justify-center font-bold text-4xl mx-auto mb-4 shadow-2xl" style={{display: 'none'}}>
+              U3BL
+            </div>
           </div>
 
           <h1 className="text-6xl md:text-8xl font-bold mb-4 bg-gradient-to-r from-[#FF8500] to-[#E63946] bg-clip-text text-transparent">

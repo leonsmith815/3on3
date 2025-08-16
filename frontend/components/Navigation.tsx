@@ -27,10 +27,18 @@ export function Navigation() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
             <img 
-              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkY4NTAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNFNjM5NDY7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjIwIiB5PSIyNiIgZm9udC1mYW1pbHk9IkludGVyLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlUzQkw8L3RleHQ+Cjwvc3ZnPgo=" 
+              src="https://i.imgur.com/YourActualLogoURL.png" 
               alt="U3BL Logo" 
               className="w-10 h-10 object-contain"
+              onError={(e) => {
+                // Fallback to gradient circle if image fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling.style.display = 'flex';
+              }}
             />
+            <div className="w-10 h-10 bg-gradient-to-br from-[#FF8500] to-[#E63946] rounded-full flex items-center justify-center font-bold text-sm" style={{display: 'none'}}>
+              U3BL
+            </div>
             <span className="font-bold text-xl hidden sm:block">U3BL</span>
           </Link>
 
