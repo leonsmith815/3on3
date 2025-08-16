@@ -37,17 +37,7 @@ export function HomePage({ onPlayerClick }: HomePageProps) {
         <div className="relative z-10 text-center text-white px-4">
           {/* Logo */}
           <div className="mb-6">
-            <img 
-              src="https://i.imgur.com/u3bl-logo.png" 
-              alt="U3BL Logo" 
-              className="w-32 h-32 mx-auto object-contain mb-4"
-              onError={(e) => {
-                // Fallback to gradient circle if image fails to load
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.nextElementSibling.style.display = 'flex';
-              }}
-            />
-            <div className="w-32 h-32 bg-gradient-to-br from-[#FF8500] to-[#E63946] rounded-full flex items-center justify-center font-bold text-4xl mx-auto mb-4" style={{display: 'none'}}>
+            <div className="w-32 h-32 bg-gradient-to-br from-[#FF8500] to-[#E63946] rounded-full flex items-center justify-center font-bold text-4xl mx-auto mb-4 shadow-2xl">
               U3BL
             </div>
           </div>
@@ -277,8 +267,8 @@ export function HomePage({ onPlayerClick }: HomePageProps) {
                 How does the salary cap work?
               </summary>
               <p className="mt-4 text-gray-700">
-                Each team operates under a salary cap system to ensure competitive balance. 
-                Teams can trade players and manage contracts to build the best possible roster within the cap constraints.
+                Each team operates under a 39-point salary cap system to ensure competitive balance. 
+                Player values are based on their draft round: 1st round (20 pts), 2nd round (8 pts), 3rd round (5 pts), and free agents (3 pts).
               </p>
             </details>
             <details className="bg-gray-50 p-6 rounded-lg">
