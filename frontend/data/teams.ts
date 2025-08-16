@@ -1,0 +1,162 @@
+import { Team } from '../types';
+
+export const teams: Team[] = [
+  // Eastern Conference
+  {
+    id: 'longhorns',
+    name: 'Longhorns',
+    city: 'Austin',
+    conference: 'Eastern',
+    wins: 18,
+    losses: 7,
+    points: 2156,
+    logo: '🐂',
+    primaryColor: '#FF8500',
+    secondaryColor: '#FFFFFF',
+    players: []
+  },
+  {
+    id: 'falcons',
+    name: 'Falcons',
+    city: 'Atlanta',
+    conference: 'Eastern',
+    wins: 16,
+    losses: 9,
+    points: 2034,
+    logo: '🦅',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
+    players: []
+  },
+  {
+    id: 'blaze',
+    name: 'Blaze',
+    city: 'Miami',
+    conference: 'Eastern',
+    wins: 15,
+    losses: 10,
+    points: 1987,
+    logo: '🔥',
+    primaryColor: '#98002E',
+    secondaryColor: '#F9A01B',
+    players: []
+  },
+  {
+    id: 'shamrocks',
+    name: 'Shamrocks',
+    city: 'Boston',
+    conference: 'Eastern',
+    wins: 14,
+    losses: 11,
+    points: 1923,
+    logo: '🍀',
+    primaryColor: '#007A33',
+    secondaryColor: '#BA9653',
+    players: []
+  },
+  {
+    id: 'bulldawgs',
+    name: 'Bulldawgs',
+    city: 'New York',
+    conference: 'Eastern',
+    wins: 12,
+    losses: 13,
+    points: 1845,
+    logo: '🐕',
+    primaryColor: '#006BB6',
+    secondaryColor: '#FFC72C',
+    players: []
+  },
+  {
+    id: 'stags',
+    name: 'Stags',
+    city: 'Milwaukee',
+    conference: 'Eastern',
+    wins: 10,
+    losses: 15,
+    points: 1756,
+    logo: '🦌',
+    primaryColor: '#00471B',
+    secondaryColor: '#EEE1C6',
+    players: []
+  },
+  // Western Conference
+  {
+    id: 'eagles',
+    name: 'Eagles',
+    city: 'Phoenix',
+    conference: 'Western',
+    wins: 20,
+    losses: 5,
+    points: 2287,
+    logo: '🦅',
+    primaryColor: '#1D1160',
+    secondaryColor: '#E56020',
+    players: []
+  },
+  {
+    id: 'gladiators',
+    name: 'Gladiators',
+    city: 'Los Angeles',
+    conference: 'Western',
+    wins: 17,
+    losses: 8,
+    points: 2098,
+    logo: '⚔️',
+    primaryColor: '#552583',
+    secondaryColor: '#FDB927',
+    players: []
+  },
+  {
+    id: 'thunder',
+    name: 'Thunder',
+    city: 'Oklahoma City',
+    conference: 'Western',
+    wins: 16,
+    losses: 9,
+    points: 2045,
+    logo: '⚡',
+    primaryColor: '#007AC1',
+    secondaryColor: '#EF3B24',
+    players: []
+  },
+  {
+    id: 'wolves',
+    name: 'Wolves',
+    city: 'Minnesota',
+    conference: 'Western',
+    wins: 13,
+    losses: 12,
+    points: 1876,
+    logo: '🐺',
+    primaryColor: '#0C2340',
+    secondaryColor: '#236192',
+    players: []
+  },
+  {
+    id: 'crush',
+    name: 'Crush',
+    city: 'Denver',
+    conference: 'Western',
+    wins: 11,
+    losses: 14,
+    points: 1798,
+    logo: '💥',
+    primaryColor: '#0E2240',
+    secondaryColor: '#FEC524',
+    players: []
+  },
+  {
+    id: 'hornets',
+    name: 'Hornets',
+    city: 'Charlotte',
+    conference: 'Western',
+    wins: 9,
+    losses: 16,
+    points: 1723,
+    logo: '🐝',
+    primaryColor: '#1D1160',
+    secondaryColor: '#00788C',
+    players: []
+  }
+];
