@@ -35,6 +35,23 @@ export function HomePage({ onPlayerClick }: HomePageProps) {
         </div>
 
         <div className="relative z-10 text-center text-white px-4">
+          {/* Logo */}
+          <div className="mb-6">
+            <img 
+              src="https://i.imgur.com/u3bl-logo.png" 
+              alt="U3BL Logo" 
+              className="w-32 h-32 mx-auto object-contain mb-4"
+              onError={(e) => {
+                // Fallback to gradient circle if image fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling.style.display = 'flex';
+              }}
+            />
+            <div className="w-32 h-32 bg-gradient-to-br from-[#FF8500] to-[#E63946] rounded-full flex items-center justify-center font-bold text-4xl mx-auto mb-4" style={{display: 'none'}}>
+              U3BL
+            </div>
+          </div>
+
           <h1 className="text-6xl md:text-8xl font-bold mb-4 bg-gradient-to-r from-[#FF8500] to-[#E63946] bg-clip-text text-transparent">
             U3BL
           </h1>

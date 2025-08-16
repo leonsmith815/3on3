@@ -26,7 +26,17 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#FF8500] to-[#E63946] rounded-full flex items-center justify-center font-bold text-sm">
+            <img 
+              src="https://i.imgur.com/u3bl-logo.png" 
+              alt="U3BL Logo" 
+              className="w-10 h-10 object-contain"
+              onError={(e) => {
+                // Fallback to gradient circle if image fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling.style.display = 'flex';
+              }}
+            />
+            <div className="w-10 h-10 bg-gradient-to-br from-[#FF8500] to-[#E63946] rounded-full flex items-center justify-center font-bold text-sm" style={{display: 'none'}}>
               U3BL
             </div>
             <span className="font-bold text-xl hidden sm:block">U3BL</span>
